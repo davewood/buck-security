@@ -15,26 +15,20 @@ POSIX::nice(19);        # run with low priority
 
 use Data::Dumper;       # for debugging only
 
+use FindBin qw/$Bin/;
+# Buck Modules
+use lib "$Bin/checks";
+use lib "$Bin/checks/lib";
+use lib "$Bin/lib";
+my $buck_root = $Bin;
+
 our $VERSION = '0.7';
 
-# Buck Modules
-use lib "checks";
-use lib "checks/lib";
-use lib "lib";
-
-my $buck_root = ".";
-
-# VERSION
-my $VERSION = '0.7';
-
-# start time
 my $start_time = time();
-
-
 my $man        = 0;
 my $help       = 0;
-my $opt_output = 0;    # verbose level: via --output=X   2 is default
-my $opt_log    = 0;     # Log? via --log
+my $opt_output = 0; # verbose level: via --output=X   2 is default
+my $opt_log    = 0; # Log? via --log
 my $opt_checksum = 0;
 my $opt_sysroot = '';
 my $opt_disable_checks = '';

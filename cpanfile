@@ -6,3 +6,4 @@ requires 'Pod::Usage';
 requires 'POSIX';
 requires 'Term::ANSIColor';
 requires 'Time::localtime';
+requires 'FindBin';
