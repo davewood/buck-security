@@ -1,9 +1,13 @@
 ############################
 #      buck-security       #
 ############################
-Author: Martin Bartenberger
-Additional Author: Anne Mulhern
-Maintainer: David Schmidt <davewood@cpan.org>
+
+# Author
+Martin Bartenberger
+
+# Contributors
+Anne Mulhern
+David Schmidt <davewood@cpan.org>
 
 
 # WEBSITE
