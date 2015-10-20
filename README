@@ -1,8 +1,9 @@
 ############################
 #      buck-security       #
 ############################
-Author: Martin Bartenberger Mail : maba4891 @users . sourceforge . net
+Author: Martin Bartenberger
 Additional Author: Anne Mulhern
+Maintainer: David Schmidt <davewood@cpan.org>
 
 DISCLAIMER OF WARRANTY
 ###########################
@@ -22,7 +23,7 @@ For more information please read the LICENSE
 
 # WEBSITE
 #############################
-You can find more informations on our website
+You can find more information on our website
 
 http://www.buck-security.org
 ##############################
@@ -71,7 +72,7 @@ Documentation
    ATTENTION: Buck Security should be just a small tool in your
    holistic security concept. Server security is a complex PROCESS
    which can't be guaranteed by a simple tool.
- 
+
 
 » Different checks
 
@@ -154,7 +155,7 @@ Documentation
    programs need the SUID or SGID bit and add them to the whitelist if
    so.
    For more information please check out [31]EXPLAIN: What is "Setuid"
-   or "SUID"? 
+   or "SUID"?
 
 › Find SETGIDS
 
