@@ -15,6 +15,7 @@ POSIX::nice(19);        # run with low priority
 
 use Data::Dumper;       # for debugging only
 
+our $VERSION = '0.7';
 
 # Buck Modules
 use lib "checks";
