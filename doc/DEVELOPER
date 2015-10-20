@@ -1,0 +1,90 @@
+###########################
+DESIGN of buck-security   #
+###########################
+Version 0.7
+
+So you want to help developing buck-security? You've come to the right place. Here you find development informations.
+For general informations how to contact the buck-security team and how you can help if you're not a programmer 
+see the WANT TO HELP section in the README file.
+
+You want to write new checks for yourself and add them to buck-security?
+It's really easy, you can use bash or perl for this. For more informations
+take a look at the NEWCHECKS file.
+
+DESCRIPTION:
+###################################################################################
+buck-security runs some simple security checks, the main program is buck-security. 
+All written in Perl 5.
+
+This is a explanation how buck-security works, it's a comment for the source code.
+So you should have a look at the source of "buck-security" while you are reading this :-)
+###################################################################################
+
+
+First we do 
+use strict;  (see http://perldoc.perl.org/strict.html)
+
+# MODULES
+Then we include the used modules (all are core modules of perl, no CPAN needed):
+
+# ROOT?
+Next we check if the program is runned by root, only root should run this program.
+
+# OPTIONS
+Then we read the options from the command line. The following options are possible at the moment:
+--help 			 shows the help message, how to use the command line options
+--log			 write the output to log file in /logs (with the date in filename)
+--output=1	     short output, show result only
+--output=2		 (default) default output, show details (which files/dirs where found f.e.)
+--output=3		 long output, also show errors
+--make-checksums create checksums of ipmortant programs to recheck later
+
+
+# PRINT HELP
+with pod2usage we print the help if needed
+
+# INCLUDE CONF
+then we include the config file (which is normal perl code, so we use "do")
+
+# PRINT HEADE
+then we print the header (buck-security X.X ....)
+
+# LOG
+then we declare the sub logprint, which decides if a log should be written (if --log was given then $opt_log is set to 1) or not 
+it is used instead of print later
+
+# THE CORE - THE CHECKS
+now there comes the core of the program:
+every check is a simple perl module in the /checks directory (either perl or
+bash checks are possible)
+the names of the checks in buck-security.conf is the same as their package and module name
+so we run through the array from the config, for each element we include a module with this name from the checks directory
+we run the check sub in each package
+in each module this is forwarded to a global check sub in checks/lib/check.pm with the title and the details of the check
+
+# THE CORE FUNCTION - /checks/lib/check.pm
+in /checks/lib/check.pm most of the work is done:
+Their is a sub for bash and one for perl checks. They work similar so we'll
+concentrate on CheckBash.
+First it checks which output mode should be used, so how many informations should be given back
+Depending on that the security check from the check module is runned on the bash, the output is saved in $outcome
+is nothing was returned (which means nothing was found by the security check) it returns the result ($result) as 0
+if something was found, it checks if the output is whitelisted an removes it if so
+then it checks if something is left (which means something which wasn't whitelisted)
+if not, it returns $result=0
+if so it returns $result=1 and the outcome which is left
+
+# PRINT RESULTS
+back to buck-security:
+for each Check the title is printed
+if result was returned 0 we print [OK]
+if result was returned 1 we print [WARNING] and the output we found (remember: if --output was set to 1 this would be suppresed in /checks/lib/check.pm)
+
+# PRINT TIME, FOOTER
+at the end we print the time it has took us to run the checks, we give out a footer with some information 
+
+# PRINT LOG IF RUNNEND WITH --log
+if we should write a log ($opt_log is set because buck-security was run with --log) we write the collected log string to a log file in /logs
+f.e. to buck-security10062009_10-08-34.log (which means it was runned on 10th July 2009 at 10:08:34)
+
+

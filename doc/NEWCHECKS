@@ -1,0 +1,31 @@
+###########################################
+# How to add new checks to buck-security? #
+###########################################
+Version 0.4
+
+# General
+You can write new checks either using bash one liners, or for more complex
+checks use perl.
+
+# BASH
+Use the file CHECK-BASH_TEMPLATE.pm in the checks directory as a template.
+Just add the name, title, the whitelist-filename and the bash code to the file and save it under the
+chosen file. All necessary items which needed to be replaced are marked with
+an TODO_
+Then create a whitelistfile with the name chosen and add the check to
+conf/buck.conf
+
+# Perl
+Use the file CHECK-PERL_TEMPLATE.pm in the checks directory as a template.
+Add title, packagename and name of the whitelist file. All necessary items
+which needed to be replaced are marked with an TODO_
+
+Add your Perl code between CODE START and CODE END at the bottom of the file.
+Your code has to save a list of the results (f.e. file or directory names,
+package names, ...) in an array named @outcomes. This array will be returned
+to the program automatically.
+
+
+# Further questions?
+If you have questions or need help please check out the README file to find
+contact information. For more technical detail check out the DEVELOPER file.
