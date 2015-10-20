@@ -16,6 +16,7 @@ POSIX::nice(19);        # run with low priority
 use Data::Dumper;       # for debugging only
 
 use FindBin qw/$Bin/;
+
 # Buck Modules
 use lib "$Bin/checks";
 use lib "$Bin/checks/lib";
@@ -24,31 +25,30 @@ my $buck_root = $Bin;
 
 our $VERSION = '0.7';
 
-my $start_time = time();
-my $man        = 0;
-my $help       = 0;
-my $opt_output = 0; # verbose level: via --output=X   2 is default
-my $opt_log    = 0; # Log? via --log
-my $opt_checksum = 0;
-my $opt_sysroot = '';
+my $start_time         = time();
+my $man                = 0;
+my $help               = 0;
+my $opt_output         = 0;       # verbose level: via --output=X   2 is default
+my $opt_log            = 0;       # Log? via --log
+my $opt_checksum       = 0;
+my $opt_sysroot        = '';
 my $opt_disable_checks = '';
-my $opt_no_sudo = 0;
+my $opt_no_sudo        = 0;
 GetOptions(
     'output=i'         => \$opt_output,
     'log:s'            => \$opt_log,
     'help|?'           => \$help,
-     man               => \$man,
+    man                => \$man,
     'make-checksums'   => \$opt_checksum,
     'sysroot=s'        => \$opt_sysroot,
-    'disable-checks=s'  => \$opt_disable_checks,
+    'disable-checks=s' => \$opt_disable_checks,
     'no-sudo'          => \$opt_no_sudo
-) ||
-pod2usage(
+  )
+  || pod2usage(
     -message => "\n",
     -exitval => 1,
     -verbose => 1
-);
-
+  );
 
 # Output Help if needed via pod2usage
 pod2usage(
@@ -57,23 +57,26 @@ pod2usage(
     -verbose => 1
 ) if $help;
 
-pod2usage( -exitval => 0,
-           -verbose => 2
+pod2usage(
+    -exitval => 0,
+    -verbose => 2
 ) if $man;
 
-pod2usage( -exitval => 1,
-           -verbose => 2,
-           -message => "Can not log or check if generating initial checksums for files.\n"
+pod2usage(
+    -exitval => 1,
+    -verbose => 2,
+    -message =>
+      "Can not log or check if generating initial checksums for files.\n"
 ) if $opt_checksum && ( $opt_log || $opt_disable_checks );
 
-if ( ! $opt_no_sudo && $> != 0 ) {
+if ( !$opt_no_sudo && $> != 0 ) {
     print STDERR "Specify -no-sudo if you wish to run not as root.\n";
     exit 1;
 }
 
 # Read Config file
-my $config_file = File::Spec->catfile($buck_root, "conf/buck-security.conf");
-if ( ! -f $config_file ) {
+my $config_file = File::Spec->catfile( $buck_root, "conf/buck-security.conf" );
+if ( !-f $config_file ) {
     print STDERR "The configuration file $config_file was not found.\n";
     exit 1;
 }
@@ -81,7 +84,7 @@ if ( ! -f $config_file ) {
 { package Config; do $config_file }
 
 if ( $opt_output != 0 ) {
-    if ( grep { $_ == $opt_output } (1, 2) ) {
+    if ( grep { $_ == $opt_output } ( 1, 2 ) ) {
         no warnings;
         $Config::output = $opt_output;
     }
@@ -91,11 +94,11 @@ if ( $opt_output != 0 ) {
     }
 }
 
-if ( $opt_sysroot ) {
+if ($opt_sysroot) {
     $Config::sysroot = $opt_sysroot;
 }
-$Config::sysroot = File::Spec->rel2abs( $Config::sysroot );
-if ( ! -d $Config::sysroot ) {
+$Config::sysroot = File::Spec->rel2abs($Config::sysroot);
+if ( !-d $Config::sysroot ) {
     print STDERR "The specified sysroot $Config::sysroot does not exist.\n";
     exit 1;
 }
@@ -103,7 +106,7 @@ if ( ! -d $Config::sysroot ) {
 $Config::buck_root = $buck_root;
 
 my %disabled_checks = map { $_ => 1 } split( /,/, $opt_disable_checks );
-@Config::checks = grep( ! defined $disabled_checks { $_ }, @Config::checks);
+@Config::checks = grep( !defined $disabled_checks{$_}, @Config::checks );
 
 $Config::ssh_config =
   File::Spec->catfile( $Config::sysroot, $Config::ssh_config );
@@ -111,17 +114,16 @@ $Config::ssh_config =
 $Config::checksum_file =
   File::Spec->catfile( $Config::buck_root, $Config::checksum_file );
 @Config::checksum_dir =
-  map {File::Spec->catfile( $Config::sysroot, $_ )} @Config::checksum_dir;
+  map { File::Spec->catfile( $Config::sysroot, $_ ) } @Config::checksum_dir;
 
-$Config::logdir =
-  File::Spec->catdir( $Config::buck_root, $Config::logdir );
-
+$Config::logdir = File::Spec->catdir( $Config::buck_root, $Config::logdir );
 
 # The -log flag has been set but no log file has been specified.
 if ( $opt_log eq '' ) {
 
-    if ( ! -d $Config::logdir ) {
-        print STDERR "The specified log directory $Config::logdir does not exist.\n";
+    if ( !-d $Config::logdir ) {
+        print STDERR
+          "The specified log directory $Config::logdir does not exist.\n";
         exit 1;
     }
 
@@ -130,20 +132,19 @@ if ( $opt_log eq '' ) {
     my $day   = sprintf( "%02d", localtime->mday() );
     my $month = localtime->mon() + 1;
     $month = sprintf( "%02d", $month );
-    my $hour  = sprintf( "%02d", localtime->hour() );
-    my $min   = sprintf( "%02d", localtime->min() );
-    my $sec   = sprintf( "%02d", localtime->sec() );
-    my $date  = $day . $month . $year . "_$hour-$min-$sec";
+    my $hour = sprintf( "%02d", localtime->hour() );
+    my $min  = sprintf( "%02d", localtime->min() );
+    my $sec  = sprintf( "%02d", localtime->sec() );
+    my $date = $day . $month . $year . "_$hour-$min-$sec";
 
     $opt_log = File::Spec->catfile( $Config::logdir, "buck$date.log" );
 }
 
-if ($opt_checksum != 0) {
+if ( $opt_checksum != 0 ) {
     use mkchecksum;
     mkchecksum->MkChecksum();
     exit;
 }
-
 
 # Number of checks
 my $nr_of_checks = @Config::checks;
@@ -154,9 +155,6 @@ my $line = "###########################";
 print "\n\n\n$line\n#   buck-security $VERSION     #\n$line\n";
 print
 "\nWe will run $nr_of_checks security checks now.\nThis may take a while...\n";
-
-
-
 
 my $log;    # String which the Log is written to, later written to fike
 
@@ -183,26 +181,29 @@ foreach (@Config::checks)
     my $pack = $_;               # Package-Name
     my $mod  = $pack . '.pm';    # Module Name
     require $mod;
-    my ( $title, $result, $test, $help_msg, $details_ref, $outcome_type) =
-      $pack->check();    # run check sub in check module
+    my ( $title, $result, $test, $help_msg, $details_ref, $outcome_type ) =
+      $pack->check();            # run check sub in check module
     my $first_line = sprintf( "%-60s", "[$nr] CHECK $pack: $title " );
     logprint("\n\n$first_line");    # print title of check
-    if ( $result != 0 ) {    # if something found print [WARNING]
+    if ( $result != 0 ) {           # if something found print [WARNING]
         print color 'bold red';
         logprint("[ WARNING ]\n");
-        print color 'reset';    # normal
-        my @details = @ { $details_ref };
+        print color 'reset';        # normal
+        my @details = @{$details_ref};
         my $details;
         if ( $result == 2 ) {
-            logprint("The security test encountered the following error during execution.\n");
+            logprint(
+"The security test encountered the following error during execution.\n"
+            );
             $details = join( "", @details );
         }
         else {
             logprint("The security test discovered a possible insecurity.\n");
             logprint("$help_msg$line$line\n");
-            @details = sort( @details );
+            @details = sort(@details);
             if ( $outcome_type eq "abspath" ) {
-                @details = map { substr( $_, length( $Config::sysroot ) ) } @details;
+                @details =
+                  map { substr( $_, length($Config::sysroot) ) } @details;
                 if ( $Config::output > 1 ) {
                     logprint("Pathnames are relative to $Config::sysroot.\n");
                 }
@@ -211,7 +212,7 @@ foreach (@Config::checks)
         }
         logprint("$details\n") if ( $Config::output > 1 );
     }
-    else {                      # if nothing found print [OK]
+    else {    # if nothing found print [OK]
         print color 'bold green';
         logprint("[ OK ]\n");
         print color 'reset';
@@ -235,8 +236,6 @@ print
 "\n\nATTENTION:\nbuck-security is still under heavy development, consider this a beta version.\nYour feedback is very welcome.\nTo get help run './buck --help' or visit http://www.buck-security.org/ \n\n\n";
 
 print color 'reset';
-
-
 
 if ($opt_log) {
     open my $LOG, '>', $opt_log or die $!;
