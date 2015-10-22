@@ -38,11 +38,12 @@ sub perl {
         return ( 1, @ { ["Password file $PasswdFile does not exist."] } );
     }
 
-    if (! open( PASSWD, '<', $PasswdFile ) ) {
+    my $PASSWD;
+    if (! open( $PASSWD, '<', $PasswdFile ) ) {
         return ( 1, @ { ["Error opening password file $PasswdFile."] } );
     }
 
-    my @PasswdFile = <PASSWD>;
+    my @PasswdFile = <$PASSWD>;
 
     my %UsersPasswdNormal = users::PasswordsNormal(@PasswdFile);
 

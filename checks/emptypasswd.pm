@@ -54,10 +54,11 @@ if (! -f $PasswdFile ) {
     return ( 1, @ { ["Password file $PasswdFile does not exist."] } );
 }
 
-if ( ! open (PASSWD, '<', $PasswdFile) ) {
+my $PASSWD;
+if ( ! open ( $PASSWD, '<', $PasswdFile) ) {
   return ( 1, @ { ["Password file $PasswdFile can not be opened."] } );
 }
-my @PasswdFile = <PASSWD>;
+my @PasswdFile = <$PASSWD>;
 
 my %UsersPasswdNormal = users::PasswordsNormal(@PasswdFile);
 
@@ -67,11 +68,11 @@ if (! -f $PasswdFile ) {
     return ( 1, @ { ["Shadow password file $PasswdFile does not exist."] } );
 }
 
-if ( ! open (PASSWD, '<', $PasswdFile) ) {
+if ( ! open (my $PASSWD, '<', $PasswdFile) ) {
   return ( 1, @ { ["Shadow password file $PasswdFile can not be opened."] } );
 }
 
-@PasswdFile = <PASSWD>;
+@PasswdFile = <$PASSWD>;
 
 # user and password items from /etc/shadow
 my %UsersPasswdShadow = users::PasswordsShadow(@PasswdFile);

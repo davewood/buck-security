@@ -17,10 +17,10 @@ package exceptions;
 sub GetExceptions {
     my $config_file = shift;
     my $outcome_type = shift;
-    open( CONFIG, "<", $config_file )
+    open( my $CONFIG, "<", $config_file )
       or die "Couldn't read $config_file: $!\n";
 
-    my @exceptions = <CONFIG>;
+    my @exceptions = <$CONFIG>;
     @exceptions = grep { $_ !~ /^#/ && $_ !~ /^\s+$/ }
       @exceptions;    # no comments (starting with #) or empty lines
 

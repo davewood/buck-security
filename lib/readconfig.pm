@@ -13,10 +13,10 @@ sub ReadConfig {
     my $config_file = shift;
     my $separator = shift;
     my %Config;
-    open(CONFIG, "<", $config_file)
+    open(my $CONFIG, "<", $config_file)
          or die "Couldn' read file $config_file: $!\n";
     
-    while (<CONFIG>) {
+    while (<$CONFIG>) {
     #    chomp;                  # no newline
         s/#.*//;                # no comments
         s/^\s+//;               # no leading white
@@ -26,7 +26,7 @@ sub ReadConfig {
         $Config{$var} = $value;
     } 
     
-    close(CONFIG);
+    close($CONFIG);
     return %Config;
 }
 
