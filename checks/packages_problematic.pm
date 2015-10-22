@@ -1,9 +1,8 @@
-#!/usr/bin/perl
+package packages_problematic;
 
 use strict;
 use warnings;
 
-package packages_problematic;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +10,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "Search problematic packages";                      
+    my $title           = "Search problematic packages";
     # the filename of this file
     my $package_name        = "packages_problematic";
     # the exception file

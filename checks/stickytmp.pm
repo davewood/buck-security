@@ -1,11 +1,10 @@
-#!/usr/bin/perl
+package stickytmp;
 
 use strict;
 use warnings;
 use File::Spec;
 use lib::check;    # for the "real" check Sub
 
-package stickytmp;
 
 sub check {
     use lib::check;

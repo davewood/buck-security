@@ -1,9 +1,8 @@
-#!/usr/bin/perl
+package firewall;
 
 use strict;
 use warnings;
 
-package firewall;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +10,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "Check firewall policies";                      
+    my $title           = "Check firewall policies";
     # the filename of this file
     my $package_name        = "firewall";
     # the exception file

@@ -1,9 +1,8 @@
-#!/usr/bin/perl
+package emptypasswd;
 
 use strict;
 use warnings;
 
-package emptypasswd;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +10,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "Users with empty password";                      
+    my $title           = "Users with empty password";
     # the filename of this file
     my $package_name        = "emptypasswd";
     # the exception file

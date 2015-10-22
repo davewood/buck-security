@@ -1,9 +1,7 @@
-#!/usr/bin/perl
+package checksum;
 
 use strict;
 use warnings;
-
-package checksum;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +9,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "Checksums of system programs";                      
+    my $title           = "Checksums of system programs";
     # the filename of this file
     my $package_name        = "checksum";
     # the exception file

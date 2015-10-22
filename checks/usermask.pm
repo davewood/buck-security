@@ -1,10 +1,9 @@
-#!/usr/bin/perl
+package usermask;
 
 use strict;
 use warnings;
 use lib::check;    # for the "real" check Sub
 
-package usermask;
 
 my $title =
   "Check umask";    # title of the test

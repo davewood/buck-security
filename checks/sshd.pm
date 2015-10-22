@@ -1,9 +1,8 @@
-#!/usr/bin/perl
+package sshd;
 
 use strict;
 use warnings;
 
-package sshd;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +10,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "Check if sshd is secured";                      
+    my $title           = "Check if sshd is secured";
     # the filename of this file
     my $package_name        = "sshd";
     # the exception file

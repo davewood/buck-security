@@ -1,13 +1,8 @@
-#!/usr/bin/perl
+package mkchecksum;
 
 use strict;
 use warnings;
 
-package mkchecksum;
-
-# mkchecksum.pm
-
-# MkChecksum
 sub MkChecksum {
     my @checksum_dirs = grep( -d $_ , @Config::checksum_dir);
     # Create checksums

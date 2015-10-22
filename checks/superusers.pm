@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+package superusers;
 
 use strict;
 use warnings;
@@ -7,7 +7,6 @@ use File::Spec;
 
 use lib::check;    # for the "real" check Sub
 
-package superusers;
 
 sub check {
 

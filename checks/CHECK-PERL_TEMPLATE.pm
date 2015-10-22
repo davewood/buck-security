@@ -1,9 +1,8 @@
-#!/usr/bin/perl
+package !PACKAGENAME;
 
 use strict;
 use warnings;
 
-package !PACKAGENAME;
 
 # just forwarding to the "real" CheckPerl Sub with variables
 # title, filename of this file, exception file and error level
@@ -11,7 +10,7 @@ sub check {
     use lib::check;
 
     # the title of the check for the output
-    my $title           = "TODO_TITLE";                      
+    my $title           = "TODO_TITLE";
     # the filename of this file
     my $package_name        = "TODO_PACKAGENAME";
     # the exception file
@@ -21,7 +20,7 @@ sub check {
     my $outcome_type = "abspath or other";
 
     # help - information about the check
-    my $help = <<HELP;
+    my $help = <<'HELP';
 TODO_INFORMATION
 HELP
 

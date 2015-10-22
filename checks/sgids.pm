@@ -1,13 +1,11 @@
-#!/usr/bin/perl
+package sgids;
 
 use strict;
 use warnings;
 
 use File::Spec;
-
 use lib::check;    # for the "real" check Sub
 
-package sgids;
 
 sub check {
     use lib::check;
