@@ -237,7 +237,7 @@ print $line;
 
 # Footer
 print
-"\n\nATTENTION:\nbuck-security is still under heavy development, consider this a beta version.\nYour feedback is very welcome, please send it to maba4891\@users.sourceforge.net.\nTo get help run './buck --help' or visit http://www.buck-security.org/ \n\n\n";
+"\n\nATTENTION:\nbuck-security is still under development, consider this a beta version.\nYour feedback is welcome, please send it to martin[at]bartenberger.de.\nTo get help run './buck --help' \n\n\n";
 
 print color 'reset';
 
@@ -292,7 +292,7 @@ Buck Security
 
 =head1 FURTHER INFORMATION
 
-To get further information visit http://www.buck-security.org or mail to maba4891@users.sourceforge.net
+To get further information mail to martin[at]bartenberger.de
 
 =cut
 
