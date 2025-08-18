@@ -22,7 +22,7 @@ sub CheckBash {
     my @errors = `$security_test 3>&1 1>/dev/null 2>&3`;
 
     if ( @errors ) {
-        return ( $title, 2, $security_test, $help, \@errors );
+        return ( $title, 2, $help, \@errors );
     }
 
     @outcomes = `$security_test 2> /dev/null`;    # execute test and save outcome WITHOUT errors
@@ -34,12 +34,12 @@ sub CheckBash {
                                                    $outcome_type);
 
     if ( ! @outcomes ) {
-        return ( $title, 0, $security_test );
+        return ( $title, 0 );
     }
 
     # found something which wasn't in the exceptions from config, return it
     else {
-        return ( $title, 1, $security_test, $help, \@outcomes, $outcome_type );
+        return ( $title, 1, $help, \@outcomes, $outcome_type );
     }
 }
 
@@ -51,7 +51,6 @@ sub CheckPerl {
     my $help = shift;
     my @outcomes;
     my $mod = $package_name . '.pm';
-    my $security_test = "a perl script, too long to display";
 
     # excute the check in file at /checks, @outcomes is defined there    
     require $mod;
@@ -59,10 +58,10 @@ sub CheckPerl {
     my ( $result, @details ) = $package_name->perl();
 
     if ( $result == 1 ) {
-        return ( $title, 2, $security_test, $help, \@details );
+        return ( $title, 2, $help, \@details );
     }
     if ( ! @details ) {
-        return ( $title, 0, $security_test );
+        return ( $title, 0 );
     }
 
     # Now check outcome against exceptions
@@ -72,12 +71,12 @@ sub CheckPerl {
     
     # if nothing left, return 0 and exit
     if ( ! @outcomes ) {
-        return ( $title, 0, $security_test );
+        return ( $title, 0 );
     }
 
     # found something which wasn't in the exceptions from config, return it
     else {
-        return ( $title, 1, $security_test, $help, \@outcomes, $outcome_type );
+        return ( $title, 1, $help, \@outcomes, $outcome_type );
     }
 
 }

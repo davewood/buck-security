@@ -188,7 +188,7 @@ foreach (@Config::checks)
     my $pack = $_;               # Package-Name
     my $mod  = $pack . '.pm';    # Module Name
     require $mod;
-    my ( $title, $result, $test, $help_msg, $details_ref, $outcome_type) =
+    my ( $title, $result, $help_msg, $details_ref, $outcome_type) =
       $pack->check();    # run check sub in check module
     my $first_line = sprintf( "%-60s", "[$nr] CHECK $pack: $title " );
     logprint("\n\n$first_line");    # print title of check
@@ -221,7 +221,6 @@ foreach (@Config::checks)
         logprint("[ OK ]\n");
         print color 'reset';
     }
-    logprint("Command was: $test\n");
     print color 'bold blue';
 
     $nr++;
