@@ -2,18 +2,113 @@
 ## A collection of security checks for Linux 
 
 *Author: Martin Bartenberger*
-*Additional Author: Anne Mulhern (Yocto Project)*
+
+*Additional Author: Anne Mulhern (Yocto Projec, Linux Foundation)*
+
+
+![Static Badge](https://img.shields.io/badge/Downloads-10%2C000%2B-blue)
+![GitHub forks](https://img.shields.io/github/forks/davewood/buck-security?style=flat)
+
+[![Perl](https://img.shields.io/badge/Perl-%2339457E.svg?logo=perl&logoColor=white)](#)
+[![Bash](https://img.shields.io/badge/Bash-4EAA25?logo=gnubash&logoColor=fff)](#)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](#)
+[![Debian](https://img.shields.io/badge/Debian-A81D33?logo=debian&logoColor=fff)](#)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white)](#)
+
+## Table of Contents
+
+  - [What is buck-security?](#what-is-buck-security)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+    - [Configure which check to run](#configure-which-check-to-run)
+    - [Configure exceptions for checks](#configure-exceptions-for-checks)
+  - [Usage](#usage)
+    - [Command line arguments](#command-line-arguments)
+  - [Different checks](#different-checks)
+    - [Find worldwriteable files](#find-worldwriteable-files)
+    - [Find worldwriteable directories](#find-worldwriteable-directories)
+    - [Find SETUIDS](#find-setuids)
+    - [Find SETGIDS](#find-setgids)
+    - [Check the default permission for new files/directories (umask)](#check-the-default-permission-for-new-filesdirectories-umask)
+    - [Check if the sticky bit is set for /tmp](#check-if-the-sticky-bit-is-set-for-tmp)
+    - [Check for superusers](#check-for-superusers)
+    - [Check for installed attack tools packages](#check-for-installed-attack-tools-packages)
+    - [Check firewall policies](#check-firewall-policies)
+    - [Check if sshd is secured](#check-if-sshd-is-secured)
+      - [PermitEmptyPasswords](#permitemptypasswords)
+      - [PermitRootLogin](#permitrootlogin)
+      - [Port](#port)
+      - [Protocol](#protocol)
+      - [TCPKeepAlive](#tcpkeepalive)
+      - [UsePrivilegeSeparation](#useprivilegeseparation)
+    - [Check for listening services](#check-for-listening-services)
+    - [Checksums of system programs](#checksums-of-system-programs)
+  - [DISCLAIMER OF WARRANTY](#disclaimer-of-warranty)
+
+
 
 ## What is buck-security?
 
 buck-security is a security scanner for Debian and Ubuntu Linux. It runs a couple of important checks and helps you to harden your Linux system. 
 
-buck-security enables you to quickly overview the security status of your Linux system. As a system administrator you often get into situations where you have to take care of a server, that has been maintained by other people before. In this situation it is useful to get an idea of the  security status of the system immediately. 
+buck-security enables you to quickly get an overview of the security status of your Linux system. As a system administrator you often get into situations where you have to take care of a server that has been maintained by other people before. In this situation it is useful to get an idea of the security status of the system immediately. 
 
-buck-security was designed for such taks but can also be used to continuously check the systems you manage. It runs a few important security checks and returns the results. It was desigend to be extremly easy to install, use and configure.
+buck-security was designed for such tasks but can also be used to continuously check the systems you manage. It runs a few important security checks and returns the results. It was desigend to be extremly easy to install, use and configure.
 
 ATTENTION: buck-security should be just a small tool in your holistic security concept. Server security is a complex process which can't be guaranteed by a simple tool.
  
+
+## Installation
+
+buck-security comes as zip-file. Just [download the latest version here](https://github.com/davewood/buck-security/archive/refs/heads/master.zip) and unzip the the zip-file. 
+
+To start the checks type `./buck-security` while in the buck-security directory). Or run `./buck-security --help` to get information about the options.
+
+## Configuration
+
+### Configure which check to run
+
+You can configure buck-security by editing the file `conf/buck-security.conf`. Here you can enable and disable the different checks by deleting them from the list. By default all checks are enabled.
+
+### Configure exceptions for checks
+
+Some warnings that buck-security will give you at the first run will probably be false alarms. buck-security include whitelists for all checks that are suited for a newly installed Debian Linux. If you are sure that the warnings you get are harmless, you can add the items to the whitelist of the check which gave you the warning. 
+
+For example if you are sure which files or directories should be allowed to be worldwriteable, or have the SETUID or SETGID set, than you can add these to the whitelist-files. Just copy and paste the list of files/directories that buck-security outputs to the proper exception file at conf/whitelists. 
+
+For example copy a list of programs which are allowed to have the SETUID set to `conf/whitelists/suids_whitelist.conf`.
+
+ ATTENTION: Please use the whitelists carefully. They may be a possible security risk.
+
+
+## Usage
+
+buck-security is started by typing `./buck-security` while in the buck-security directory.
+
+By default all checks are enabled. For disabling checks see the section CONFIGURATION. 
+
+The different checks may take a while. After they have been finished you will get informations about potentially security risks. You have to decide for yourself how to handle this information.
+
+### Command line arguments
+
+To control the output and enable logging of the results, the following command line arguments are available:
+
+`./buck-security --help`
+*show help*
+
+`./buck-security --log`
+*logs output in logs-directory*
+
+`./buck-security --output=1`
+*short output, show result only*
+
+`./buck-security --output=2`
+*(default) default output, show details (which files/dirs where found e.g.)*
+
+`./buck-security --make-checksums`
+*create checksums for the most important system programs to recheck them later (if the checksums check is enabled)*
+
+
 
 ## Different checks
 
@@ -167,53 +262,6 @@ When runned with the `--make-checksum` option buck-security by default creates c
 
 If you control the integrity of your system already with other programs (like tripwire) you can disable the checksum check.
 
-
-## Installation
-
-buck-security comes as zip-file. Just [download the latest version here](https://github.com/davewood/buck-security/archive/refs/heads/master.zip) and unzip the the zip-file. To start the checks run the *buck* program (type `./buck` while in the buck-security directory). Or run `buck --help` to get information about the options.
-
-### Configuration
-
-#### Configure which check to run
-
-You can configure buck-security by editing the file `conf/buck.conf`. Here you can enable and disable the different checks by deleting them from the list. By default all checks are enabled.
-
-#### Configure exceptions for checks
-
-Some warnings that buck-security will give you at the first run will probably be false alarms. buck-security include whitelists for all checks that are suited for a newly installed Debian Linux. If you are sure that the warnings you get are harmless, you can add the items to the whitelist of the check which gave you the warning. 
-
-For example if you are sure which files or directories should be allowed to be worldwriteable, or have the SETUID or SETGID set, than you can add these to the whitelist-files. Just copy and paste the list of files/directories that buck-security outputs to the proper exception file at conf/whitelists. 
-
-For example copy a list of programs which are allowed to have the SETUID set to `conf/whitelists/suids_whitelist.conf`.
-
- ATTENTION: Please use the whitelists carefully. They may be a possible security risk.
-
-
-### Usage
-
-By default all checks are enabled. For disabling checks see the section CONFIGURATION. buck-security is started by executing the buck program (type `./buck` while in the buck-security directory).
-
-The different checks may take a while. After they have been finished you will get informations about potentially security risks. You have to decide for yourself how to handle this information.
-
-#### Command line arguments
-
-To control the output and enable logging of the results, the following command line arguments are available:
-
-`./buck-security --help`
-show help
-
-`./buck-security --log`
-logs output in logs-directory
-
-`./buck-security --output=1`
-short output, show result only
-
-`./buck-security --output=2`
-(default) default output, show details (which files/dirs where found e.g.)
-
-`./buck-security --make-checksums`
-create checksums for the most important system programs to recheck 
- them later (if the checksums check is enabled)
 
 
 
