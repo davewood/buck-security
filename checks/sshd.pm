@@ -45,7 +45,7 @@ use readconfig;
 
 my $config_file = $Config::ssh_config;
 if ( ! -f $Config::ssh_config ) {
-    return ( 1, @ { [ "sshd configuration file $Config::ssh_config not found." ] } );
+    return ( 1, @ { [ "$Config::ssh_config not found. Either install sshd or correct the file path in buck-security.conf" ] } );
 }
 
 my %SSHConfig = readconfig::ReadConfig($config_file, ' '); # separator is whitespace
