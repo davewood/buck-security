@@ -24,7 +24,7 @@ use lib "lib";
 my $buck_root = ".";
 
 # VERSION
-my $VERSION = '0.7';
+my $VERSION = '0.7.1';
 
 # start time
 my $start_time = time();
