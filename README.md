@@ -3,7 +3,7 @@
 
 *Author: Martin Bartenberger*
 
-*Additional Author: Anne Mulhern (Yocto Projec, Linux Foundation)*
+*Additional Author: Anne Mulhern (Yocto Project, Linux Foundation)*
 
 
 ![Static Badge](https://img.shields.io/badge/Downloads-10%2C000%2B-blue)
